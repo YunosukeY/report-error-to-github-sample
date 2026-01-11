@@ -1,0 +1,22 @@
+{
+  "version": "1.0",
+  "subject": "New error in YOUR_PROJECT_ID test-service",
+  "group_info": {
+    "project_id": "YOUR_PROJECT_ID",
+    "detail_link": "https://example.com/"
+  },
+  "exception_info": {
+    "type": "java.lang.TestError",
+    "message": "msg"
+  },
+  "event_info": {
+    "log_message": "java.lang.TestError: msg\n    at com.example.TestClass.test(TestClass.java:51)\n    at com.example.AnotherClass(AnotherClass.java:25)",
+    "request_method": "",
+    "request_url": "",
+    "referrer": "",
+    "user_agent": "",
+    "service": "test-service",
+    "version": "",
+    "response_status": "0"
+  }
+}
