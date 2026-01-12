@@ -11,9 +11,17 @@ app = FastAPI()
 security = HTTPBasic()
 
 
+BASIC_AUTH_USERNAME = os.environ["BASIC_AUTH_USERNAME"]
+BASIC_AUTH_PASSWORD = os.environ["BASIC_AUTH_PASSWORD"]
+
+
 def basic_auth(credentials: Annotated[HTTPBasicCredentials, Depends(security)]):
-    is_username_correct = secrets.compare_digest(credentials.username, "test_username")
-    is_password_correct = secrets.compare_digest(credentials.password, "test_password")
+    is_username_correct = secrets.compare_digest(
+        credentials.username, BASIC_AUTH_USERNAME
+    )
+    is_password_correct = secrets.compare_digest(
+        credentials.password, BASIC_AUTH_PASSWORD
+    )
     if not (is_username_correct and is_password_correct):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -50,13 +58,14 @@ class ErrorReportingWebhook(BaseModel):
     event_info: EventInfo
 
 
+GITHUB_REPO = os.environ["GITHUB_REPO"]
 auth = Auth.Token(os.environ["GITHUB_PAT"])
 
 
 @app.post("/", dependencies=[Depends(basic_auth)])
 def report(report: ErrorReportingWebhook):
     with Github(auth=auth) as g:
-        repo = g.get_repo("YunosukeY/error-report-to-github-sample")
+        repo = g.get_repo(GITHUB_REPO)
         repo.create_issue(
             title=report.event_info.log_message,
             body=f"""エラー
